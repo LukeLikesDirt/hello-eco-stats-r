@@ -30,11 +30,11 @@ if (length(packages_to_install) > 0) {
 library(swirl)
 
 course_name <- "Intro_Ecological_Statistics_in_R"
-course_dir  <- file.path(getwd(), "swirl_courses")
+course_dir  <- file.path(getwd(), "swirl_courses", course_name)
 
 # Remove previous version (if any) then re-install from local files
 suppressWarnings(uninstall_course(course_name))
-install_course_directory(course_dir, course_name = course_name)
+install_course_directory(course_dir)
 
 # Start swirl ------------------------------------------------------------------
 swirl()

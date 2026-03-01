@@ -37,6 +37,7 @@ hello-eco-stats-r/
 ├── README.md
 ├── 01_introduction_to_r_programming.R    # Launcher script (all weeks)
 ├── _render.R                             # Knit all Rmds → docs/
+├── _smoke_test.R                         # Validate lessons
 ├── weeks/
 │   ├── week_01/
 │   │   └── week_01_introduction_to_r_programming.Rmd
@@ -46,9 +47,10 @@ hello-eco-stats-r/
 │   ├── index.html
 │   ├── week_01_introduction_to_r_programming.html
 │   └── week_02_data_wrangling_and_exploratory_ecological_analysis.html
-└── swirl_courses/                        # Interactive swirl lessons
-    ├── 01_introduction_to_r_programming/
-    └── 02_data_wrangling_and_exploratory_ecological_analysis/
+├── swirl_courses/                        # Interactive swirl lessons
+│   └── Intro_Ecological_Statistics_in_R/
+│       ├── 01_introduction_to_r_programming/
+│       └── 02_data_wrangling_and_exploratory_ecological_analysis/
 ```
 
 ---
