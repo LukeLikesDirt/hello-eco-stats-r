@@ -1,0 +1,196 @@
+- Class: meta
+  Course: Intro Ecological Statistics in R
+  Lesson: 02 data wrangling and exploratory ecological analysis
+  Author: ENV3QRM Teaching Team
+  Type: Standard
+  Organization: La Trobe University
+  Version: 2.4.5
+
+- Class: text
+  Output: "Welcome to Component 2. You will wrangle ecological monitoring data and perform exploratory analysis using tidyverse tools."
+
+- Class: text
+  Output: "By the end of this lesson, you will filter, summarise, transform variables, visualize patterns, and export tidy outputs for later statistical modeling."
+
+- Class: cmd_question
+  Output: "Load tidyverse."
+  CorrectAnswer: library(tidyverse)
+  AnswerTests: omnitest(correctExpr='library(tidyverse)')
+  Hint: "Use library()."
+
+- Class: cmd_question
+  Output: "Preview the eco_monitor dataset."
+  CorrectAnswer: head(eco_monitor)
+  AnswerTests: omnitest(correctExpr='head(eco_monitor)')
+  Hint: "Use head()."
+
+- Class: cmd_question
+  Output: "Check the structure of eco_monitor."
+  CorrectAnswer: str(eco_monitor)
+  AnswerTests: omnitest(correctExpr='str(eco_monitor)')
+  Hint: "Use str()."
+
+- Class: mult_question
+  Output: "Which variable in eco_monitor describes sampling effort?"
+  AnswerChoices: effort_hours;month;species_richness;rainfall_mm
+  CorrectAnswer: effort_hours
+  AnswerTests: omnitest(correctVal='effort_hours')
+  Hint: "Look for a variable related to time spent surveying."
+
+- Class: cmd_question
+  Output: "Select only month, site, habitat, abundance, and effort_hours columns."
+  CorrectAnswer: eco_monitor %>% select(month, site, habitat, abundance, effort_hours)
+  AnswerTests: omnitest(correctExpr='eco_monitor %>% select(month, site, habitat, abundance, effort_hours)')
+  Hint: "Use select()."
+
+- Class: cmd_question
+  Output: "Create wet_season as rows with rainfall_mm >= 100."
+  CorrectAnswer: wet_season <- eco_monitor %>% filter(rainfall_mm >= 100)
+  AnswerTests: omnitest(correctExpr='wet_season <- eco_monitor %>% filter(rainfall_mm >= 100)')
+  Hint: "Use filter() with >= 100."
+
+- Class: cmd_question
+  Output: "Print wet_season."
+  CorrectAnswer: wet_season
+  AnswerTests: omnitest(correctExpr='wet_season')
+  Hint: "Type wet_season."
+
+- Class: cmd_question
+  Output: "Create grass_data containing only habitat == 'grassland'."
+  CorrectAnswer: grass_data <- eco_monitor %>% filter(habitat == "grassland")
+  AnswerTests: omnitest(correctExpr='grass_data <- eco_monitor %>% filter(habitat == "grassland")')
+  Hint: "Use filter(habitat == 'grassland')."
+
+- Class: cmd_question
+  Output: "Count how many observations occur in each month."
+  CorrectAnswer: eco_monitor %>% count(month)
+  AnswerTests: omnitest(correctExpr='eco_monitor %>% count(month)')
+  Hint: "Use count(month)."
+
+- Class: cmd_question
+  Output: "Create effort_standardized by adding abundance_per_hour = abundance / effort_hours."
+  CorrectAnswer: effort_standardized <- eco_monitor %>% mutate(abundance_per_hour = abundance / effort_hours)
+  AnswerTests: omnitest(correctExpr='effort_standardized <- eco_monitor %>% mutate(abundance_per_hour = abundance / effort_hours)')
+  Hint: "Use mutate()."
+
+- Class: cmd_question
+  Output: "Display site, month, and abundance_per_hour from effort_standardized."
+  CorrectAnswer: effort_standardized %>% select(site, month, abundance_per_hour)
+  AnswerTests: omnitest(correctExpr='effort_standardized %>% select(site, month, abundance_per_hour)')
+  Hint: "Use select() on effort_standardized."
+
+- Class: text
+  Output: "Excellent. Standardizing abundance by effort makes comparisons fairer across surveys of different durations."
+
+- Class: cmd_question
+  Output: "Summarise mean abundance by habitat (name the result habitat_mean_abundance)."
+  CorrectAnswer: habitat_mean_abundance <- eco_monitor %>% group_by(habitat) %>% summarise(mean_abundance = mean(abundance))
+  AnswerTests: omnitest(correctExpr='habitat_mean_abundance <- eco_monitor %>% group_by(habitat) %>% summarise(mean_abundance = mean(abundance))')
+  Hint: "Use group_by(habitat) + summarise()."
+
+- Class: cmd_question
+  Output: "Print habitat_mean_abundance."
+  CorrectAnswer: habitat_mean_abundance
+  AnswerTests: omnitest(correctExpr='habitat_mean_abundance')
+  Hint: "Type habitat_mean_abundance."
+
+- Class: cmd_question
+  Output: "Calculate mean species_richness by site and month."
+  CorrectAnswer: eco_monitor %>% group_by(site, month) %>% summarise(mean_richness = mean(species_richness))
+  AnswerTests: omnitest(correctExpr='eco_monitor %>% group_by(site, month) %>% summarise(mean_richness = mean(species_richness))')
+  Hint: "group_by(site, month) then summarise()."
+
+- Class: cmd_question
+  Output: "Create habitat_month_summary with mean_abundance and mean_richness by habitat and month."
+  CorrectAnswer: habitat_month_summary <- eco_monitor %>% group_by(habitat, month) %>% summarise(mean_abundance = mean(abundance), mean_richness = mean(species_richness))
+  AnswerTests: omnitest(correctExpr='habitat_month_summary <- eco_monitor %>% group_by(habitat, month) %>% summarise(mean_abundance = mean(abundance), mean_richness = mean(species_richness))')
+  Hint: "Use group_by(habitat, month) then summarise() with two summaries."
+
+- Class: cmd_question
+  Output: "Arrange habitat_month_summary by descending mean_abundance."
+  CorrectAnswer: habitat_month_summary %>% arrange(desc(mean_abundance))
+  AnswerTests: omnitest(correctExpr='habitat_month_summary %>% arrange(desc(mean_abundance))')
+  Hint: "Use arrange(desc(mean_abundance))."
+
+- Class: mult_question
+  Output: "Why is grouped summarisation useful in ecology?"
+  AnswerChoices: It compares patterns across habitats or time periods;It guarantees causal conclusions;It removes all sampling bias;It replaces field observations
+  CorrectAnswer: It compares patterns across habitats or time periods
+  AnswerTests: omnitest(correctVal='It compares patterns across habitats or time periods')
+  Hint: "Think comparison across groups."
+
+- Class: cmd_question
+  Output: "Create a scatter plot of rainfall_mm vs abundance with points colored by habitat."
+  CorrectAnswer: ggplot(eco_monitor, aes(x = rainfall_mm, y = abundance, color = habitat)) + geom_point()
+  AnswerTests: omnitest(correctExpr='ggplot(eco_monitor, aes(x = rainfall_mm, y = abundance, color = habitat)) + geom_point()')
+  Hint: "Use ggplot() + geom_point()."
+
+- Class: cmd_question
+  Output: "Add a linear trend line to that scatter plot (without confidence band)."
+  CorrectAnswer: ggplot(eco_monitor, aes(x = rainfall_mm, y = abundance, color = habitat)) + geom_point() + geom_smooth(method = "lm", se = FALSE)
+  AnswerTests: omnitest(correctExpr='ggplot(eco_monitor, aes(x = rainfall_mm, y = abundance, color = habitat)) + geom_point() + geom_smooth(method = "lm", se = FALSE)')
+  Hint: "Use geom_smooth(method = 'lm', se = FALSE)."
+
+- Class: cmd_question
+  Output: "Create a boxplot of species_richness by habitat."
+  CorrectAnswer: ggplot(eco_monitor, aes(x = habitat, y = species_richness)) + geom_boxplot()
+  AnswerTests: omnitest(correctExpr='ggplot(eco_monitor, aes(x = habitat, y = species_richness)) + geom_boxplot()')
+  Hint: "Use geom_boxplot()."
+
+- Class: cmd_question
+  Output: "Create monthly_trend with total abundance per month."
+  CorrectAnswer: monthly_trend <- eco_monitor %>% group_by(month) %>% summarise(total_abundance = sum(abundance))
+  AnswerTests: omnitest(correctExpr='monthly_trend <- eco_monitor %>% group_by(month) %>% summarise(total_abundance = sum(abundance))')
+  Hint: "Use group_by(month) and sum(abundance)."
+
+- Class: cmd_question
+  Output: "Plot monthly total abundance as a line graph with points."
+  CorrectAnswer: ggplot(monthly_trend, aes(x = month, y = total_abundance, group = 1)) + geom_line() + geom_point()
+  AnswerTests: omnitest(correctExpr='ggplot(monthly_trend, aes(x = month, y = total_abundance, group = 1)) + geom_line() + geom_point()')
+  Hint: "Use ggplot(monthly_trend, aes(...)) + geom_line() + geom_point()."
+
+- Class: text
+  Output: "Nice work. You have just completed a mini exploratory analysis workflow used in many real ecological studies."
+
+- Class: cmd_question
+  Output: "Create model_ready by selecting month, site, habitat, species_richness, abundance, rainfall_mm, temp_c, and effort_hours."
+  CorrectAnswer: model_ready <- eco_monitor %>% select(month, site, habitat, species_richness, abundance, rainfall_mm, temp_c, effort_hours)
+  AnswerTests: omnitest(correctExpr='model_ready <- eco_monitor %>% select(month, site, habitat, species_richness, abundance, rainfall_mm, temp_c, effort_hours)')
+  Hint: "Use select() with exactly those columns."
+
+- Class: cmd_question
+  Output: "Write model_ready to model_ready_ecology.csv without row names."
+  CorrectAnswer: write.csv(model_ready, "model_ready_ecology.csv", row.names = FALSE)
+  AnswerTests: omnitest(correctExpr='write.csv(model_ready, "model_ready_ecology.csv", row.names = FALSE)')
+  Hint: "Use write.csv(..., row.names = FALSE)."
+
+- Class: cmd_question
+  Output: "Read model_ready_ecology.csv back into model_ready_check."
+  CorrectAnswer: model_ready_check <- read.csv("model_ready_ecology.csv")
+  AnswerTests: omnitest(correctExpr='model_ready_check <- read.csv("model_ready_ecology.csv")')
+  Hint: "Use read.csv()."
+
+- Class: cmd_question
+  Output: "Display the first rows of model_ready_check."
+  CorrectAnswer: head(model_ready_check)
+  AnswerTests: omnitest(correctExpr='head(model_ready_check)')
+  Hint: "Use head()."
+
+- Class: mult_question
+  Output: "After exploratory analysis, what is a good next step in an ecological statistics workflow?"
+  AnswerChoices: Fit and evaluate statistical models based on your questions;Delete raw data files immediately;Use only one graph as final evidence;Stop analysis without documenting methods
+  CorrectAnswer: Fit and evaluate statistical models based on your questions
+  AnswerTests: omnitest(correctVal='Fit and evaluate statistical models based on your questions')
+  Hint: "Think hypothesis-driven modeling."
+
+- Class: cmd_question
+  Output: "Run sessionInfo() to record software details for reproducibility."
+  CorrectAnswer: sessionInfo()
+  AnswerTests: omnitest(correctExpr='sessionInfo()')
+  Hint: "Type sessionInfo()."
+
+- Class: text
+  Output: "Great job. You completed Component 2: data wrangling + exploratory ecological analysis using tidyverse."
+
+- Class: text
+  Output: "You are now ready for inferential methods in ecology, such as linear models, generalized linear models, and model diagnostics."

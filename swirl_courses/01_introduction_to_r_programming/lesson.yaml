@@ -1,0 +1,282 @@
+- Class: meta
+  Course: Intro Ecological Statistics in R
+  Lesson: 01 introduction to R programming
+  Author: ENV3QRM Teaching Team
+  Type: Standard
+  Organisation: La Trobe University
+
+# ---------------------------------------------------------------------------
+# Section 1 — R Basics & Vectors
+# ---------------------------------------------------------------------------
+
+- Class: text
+  Output: "Welcome! This crash course is for absolute beginners in ecology. In about 1 hour you will learn R basics, read in ecological survey data, then manipulate and summarise it using base R and tidyverse tools."
+
+- Class: text
+  Output: "Tip — if you get stuck, type hint() for help or skip() to move on. Let's begin with simple objects in R."
+
+- Class: mult_question
+  Output: "Q1: Which object type is the basic building block for storing a sequence of values in R?"
+  AnswerChoices: vector;plot;package;function
+  CorrectAnswer: vector
+  AnswerTests: omnitest(correctVal='vector')
+  Hint: "Think of c(1, 2, 3)."
+
+- Class: cmd_question
+  Output: 'Q2: Create a character object called study_region and assign it the value "Temperate woodland".'
+  CorrectAnswer: study_region <- "Temperate woodland"
+  AnswerTests: omnitest(correctExpr='study_region <- "Temperate woodland"')
+  Hint: "Use <- to assign text in quotes."
+
+- Class: cmd_question
+  Output: "Q3: Create a numeric object called n_sites with value 4."
+  CorrectAnswer: n_sites <- 4
+  AnswerTests: omnitest(correctExpr='n_sites <- 4')
+  Hint: "Use the assignment arrow and a number."
+
+- Class: cmd_question
+  Output: 'Q4: Create a vector called survey_days containing "Mon", "Wed", and "Fri".'
+  CorrectAnswer: survey_days <- c("Mon", "Wed", "Fri")
+  AnswerTests: omnitest(correctExpr='survey_days <- c("Mon", "Wed", "Fri")')
+  Hint: "Use c() to combine values."
+
+- Class: cmd_question
+  Output: "Q5: Print survey_days to the console."
+  CorrectAnswer: survey_days
+  AnswerTests: omnitest(correctExpr='survey_days')
+  Hint: "Type the object name and press Enter."
+
+# ---------------------------------------------------------------------------
+# Section 2 — Reading & Inspecting Data
+# ---------------------------------------------------------------------------
+
+- Class: text
+  Output: "Great work! In ecological research, data usually comes from files rather than being typed by hand. A CSV (comma-separated values) file is the most common format. A file called 'eco_survey.csv' has been placed in your working directory — it contains species counts from field surveys across several habitats."
+
+- Class: cmd_question
+  Output: 'Q6: Read the file "eco_survey.csv" into an object called eco_survey using read.csv().'
+  CorrectAnswer: eco_survey <- read.csv("eco_survey.csv")
+  AnswerTests: omnitest(correctExpr='eco_survey <- read.csv("eco_survey.csv")')
+  Hint: 'Use eco_survey <- read.csv("eco_survey.csv").'
+
+- Class: cmd_question
+  Output: "Q7: Display the first 6 rows of eco_survey using head()."
+  CorrectAnswer: head(eco_survey)
+  AnswerTests: omnitest(correctExpr='head(eco_survey)')
+  Hint: "Use head()."
+
+- Class: cmd_question
+  Output: "Q8: Check the structure of eco_survey using str()."
+  CorrectAnswer: str(eco_survey)
+  AnswerTests: omnitest(correctExpr='str(eco_survey)')
+  Hint: "Use str()."
+
+- Class: mult_question
+  Output: "Q9: Looking at the output of str(), how many observations (rows) are in eco_survey?"
+  AnswerChoices: 12;7;4;24
+  CorrectAnswer: 12
+  AnswerTests: omnitest(correctVal='12')
+  Hint: "The str() output shows the number of observations at the top."
+
+- Class: mult_question
+  Output: "Q10: In this dataset, what does the 'count' column represent?"
+  AnswerChoices: Number of individuals observed;Site elevation in meters;Hours spent in the lab;A species ID code
+  CorrectAnswer: Number of individuals observed
+  AnswerTests: omnitest(correctVal='Number of individuals observed')
+  Hint: "This is a field survey dataset recording species observations."
+
+# ---------------------------------------------------------------------------
+# Section 3 — Basic Calculations & Subsetting
+# ---------------------------------------------------------------------------
+
+- Class: text
+  Output: "Now that we have our data loaded, let's perform some basic calculations and learn to subset rows."
+
+- Class: cmd_question
+  Output: "Q11: Calculate the mean of the count column and save it as mean_count."
+  CorrectAnswer: mean_count <- mean(eco_survey$count)
+  AnswerTests: omnitest(correctExpr='mean_count <- mean(eco_survey$count)')
+  Hint: "Use mean() with the $ operator to access the column."
+
+- Class: cmd_question
+  Output: "Q12: Round mean_count to 2 decimal places."
+  CorrectAnswer: round(mean_count, 2)
+  AnswerTests: omnitest(correctExpr='round(mean_count, 2)')
+  Hint: "Use round(x, digits)."
+
+- Class: cmd_question
+  Output: "Q13: Create frog_rows by keeping only rows where species is 'frog' using base R indexing."
+  CorrectAnswer: frog_rows <- eco_survey[eco_survey$species == "frog", ]
+  AnswerTests: omnitest(correctExpr='frog_rows <- eco_survey[eco_survey$species == "frog", ]')
+  Hint: "Use logical indexing: eco_survey[eco_survey$species == 'frog', ]."
+
+- Class: cmd_question
+  Output: "Q14: How many rows are in frog_rows? Use nrow()."
+  CorrectAnswer: nrow(frog_rows)
+  AnswerTests: omnitest(correctExpr='nrow(frog_rows)')
+  Hint: "Use nrow()."
+
+# ---------------------------------------------------------------------------
+# Section 4 — Introduction to the Tidyverse
+# ---------------------------------------------------------------------------
+
+- Class: text
+  Output: "Excellent. Now let's switch to the tidyverse — a collection of R packages designed for data science. The tidyverse uses the pipe operator (%>%) to chain steps together in a readable, left-to-right workflow. We will use tidyverse tools throughout the rest of this course."
+
+- Class: cmd_question
+  Output: "Load the tidyverse package."
+  CorrectAnswer: library(tidyverse)
+  AnswerTests: omnitest(correctExpr='library(tidyverse)')
+  Hint: "Use library(tidyverse)."
+
+- Class: mult_question
+  Output: "Q15: Why do we use the pipe operator (%>%) in tidyverse workflows?"
+  AnswerChoices: It connects steps in a readable sequence;It makes code run only on Windows;It replaces all statistical tests;It is required to create plots
+  CorrectAnswer: It connects steps in a readable sequence
+  AnswerTests: omnitest(correctVal='It connects steps in a readable sequence')
+  Hint: "Think readability and workflow."
+
+- Class: cmd_question
+  Output: "Use select() and head() in a pipeline to view the site, species, and count columns of eco_survey."
+  CorrectAnswer: eco_survey %>% select(site, species, count) %>% head()
+  AnswerTests: omnitest(correctExpr='eco_survey %>% select(site, species, count) %>% head()')
+  Hint: "Use %>% to pass eco_survey to select(), then to head()."
+
+# ---------------------------------------------------------------------------
+# Section 5 — Filtering & Selecting Data
+# ---------------------------------------------------------------------------
+
+- Class: text
+  Output: "Now let's use tidyverse verbs to filter and select specific subsets of our ecological survey."
+
+- Class: cmd_question
+  Output: "Q16: Create wetland_data by filtering eco_survey to habitat == 'wetland'."
+  CorrectAnswer: wetland_data <- eco_survey %>% filter(habitat == "wetland")
+  AnswerTests: omnitest(correctExpr='wetland_data <- eco_survey %>% filter(habitat == "wetland")')
+  Hint: "Use filter(habitat == 'wetland')."
+
+- Class: cmd_question
+  Output: "Q17: Print wetland_data."
+  CorrectAnswer: wetland_data
+  AnswerTests: omnitest(correctExpr='wetland_data')
+  Hint: "Type the object name."
+
+- Class: cmd_question
+  Output: "Q18: Count how many records you have for each species, sorted from highest to lowest."
+  CorrectAnswer: eco_survey %>% count(species, sort = TRUE)
+  AnswerTests: omnitest(correctExpr='eco_survey %>% count(species, sort = TRUE)')
+  Hint: "Use count(species, sort = TRUE)."
+
+# ---------------------------------------------------------------------------
+# Section 6 — Creating New Variables
+# ---------------------------------------------------------------------------
+
+- Class: text
+  Output: "The mutate() function adds new columns to your data. This is useful when you need to derive new variables — for example, standardising counts by environmental conditions."
+
+- Class: cmd_question
+  Output: "Q19: Add a new column called count_per_mm_rain = count / rainfall_mm and overwrite eco_survey."
+  CorrectAnswer: eco_survey <- eco_survey %>% mutate(count_per_mm_rain = count / rainfall_mm)
+  AnswerTests: omnitest(correctExpr='eco_survey <- eco_survey %>% mutate(count_per_mm_rain = count / rainfall_mm)')
+  Hint: "Use mutate() and assign back to eco_survey."
+
+- Class: cmd_question
+  Output: "Q20: Show species and count_per_mm_rain for the first 6 rows."
+  CorrectAnswer: eco_survey %>% select(species, count_per_mm_rain) %>% head()
+  AnswerTests: omnitest(correctExpr='eco_survey %>% select(species, count_per_mm_rain) %>% head()')
+  Hint: "Use select() and head()."
+
+# ---------------------------------------------------------------------------
+# Section 7 — Summarising Data
+# ---------------------------------------------------------------------------
+
+- Class: text
+  Output: "Summarising is at the heart of ecological data analysis. The group_by() and summarise() combination lets you compute statistics for each level of a grouping variable — for example, total counts per site or mean temperature per habitat."
+
+- Class: cmd_question
+  Output: "Q21: Create site_totals with total individuals per site using group_by() and summarise()."
+  CorrectAnswer: site_totals <- eco_survey %>% group_by(site) %>% summarise(total_count = sum(count))
+  AnswerTests: omnitest(correctExpr='site_totals <- eco_survey %>% group_by(site) %>% summarise(total_count = sum(count))')
+  Hint: "group_by(site) then summarise(total_count = sum(count))."
+
+- Class: cmd_question
+  Output: "Q22: Print site_totals."
+  CorrectAnswer: site_totals
+  AnswerTests: omnitest(correctExpr='site_totals')
+  Hint: "Type site_totals."
+
+- Class: cmd_question
+  Output: "Q23: Compute mean temperature by habitat (call the column mean_temp)."
+  CorrectAnswer: eco_survey %>% group_by(habitat) %>% summarise(mean_temp = mean(temp_c))
+  AnswerTests: omnitest(correctExpr='eco_survey %>% group_by(habitat) %>% summarise(mean_temp = mean(temp_c))')
+  Hint: "group_by(habitat) and summarise(mean_temp = mean(temp_c))."
+
+- Class: cmd_question
+  Output: "Q24: Display the top 3 highest counts with site, species, and count."
+  CorrectAnswer: eco_survey %>% arrange(desc(count)) %>% select(site, species, count) %>% head(3)
+  AnswerTests: omnitest(correctExpr='eco_survey %>% arrange(desc(count)) %>% select(site, species, count) %>% head(3)')
+  Hint: "Use arrange(desc(count)), then select(), then head(3)."
+
+# ---------------------------------------------------------------------------
+# Section 8 — Visualization with ggplot2
+# ---------------------------------------------------------------------------
+
+- Class: text
+  Output: "Visualization is essential for exploring ecological data. ggplot2, included in the tidyverse, uses a 'grammar of graphics' to build plots layer by layer."
+
+- Class: cmd_question
+  Output: "Q25: Create a boxplot of count by habitat using ggplot2."
+  CorrectAnswer: ggplot(eco_survey, aes(x = habitat, y = count)) + geom_boxplot()
+  AnswerTests: omnitest(correctExpr='ggplot(eco_survey, aes(x = habitat, y = count)) + geom_boxplot()')
+  Hint: "Use ggplot(data, aes(...)) + geom_boxplot()."
+
+- Class: text
+  Output: "In ecology, boxplots like this help compare abundance distributions across habitat types. Notice how the median and spread differ between habitats."
+
+# ---------------------------------------------------------------------------
+# Section 9 — Putting It All Together
+# ---------------------------------------------------------------------------
+
+- Class: text
+  Output: "Let's combine multiple tidyverse verbs in a single pipeline — this is how real ecological data analysis workflows look."
+
+- Class: cmd_question
+  Output: "Q26: Create species_summary with total_count and n_records for each species, sorted descending by total_count."
+  CorrectAnswer: species_summary <- eco_survey %>% group_by(species) %>% summarise(total_count = sum(count), n_records = n()) %>% arrange(desc(total_count))
+  AnswerTests: omnitest(correctExpr='species_summary <- eco_survey %>% group_by(species) %>% summarise(total_count = sum(count), n_records = n()) %>% arrange(desc(total_count))')
+  Hint: "Use group_by(species), summarise(), then arrange(desc(total_count))."
+
+- Class: cmd_question
+  Output: "Q27: Print species_summary."
+  CorrectAnswer: species_summary
+  AnswerTests: omnitest(correctExpr='species_summary')
+  Hint: "Type species_summary."
+
+- Class: cmd_question
+  Output: "Q28: Write species_summary to a CSV file named 'species_summary.csv' (without row names)."
+  CorrectAnswer: write.csv(species_summary, "species_summary.csv", row.names = FALSE)
+  AnswerTests: omnitest(correctExpr='write.csv(species_summary, "species_summary.csv", row.names = FALSE)')
+  Hint: "Use write.csv(..., row.names = FALSE)."
+
+# ---------------------------------------------------------------------------
+# Section 10 — Reproducibility
+# ---------------------------------------------------------------------------
+
+- Class: mult_question
+  Output: "Q29: Which action best supports reproducible ecological analysis?"
+  AnswerChoices: Keeping all analysis steps in scripts and re-running them;Editing numbers manually in spreadsheets only;Using different names for the same variable each day;Running code once and not saving it
+  CorrectAnswer: Keeping all analysis steps in scripts and re-running them
+  AnswerTests: omnitest(correctVal='Keeping all analysis steps in scripts and re-running them')
+  Hint: "Think repeatable workflow."
+
+- Class: cmd_question
+  Output: "Q30: Run sessionInfo() so you can record software and package versions."
+  CorrectAnswer: sessionInfo()
+  AnswerTests: omnitest(correctExpr='sessionInfo()')
+  Hint: "Type sessionInfo()."
+
+- Class: text
+  Output: "Excellent work! You now know how to create objects and vectors, read in ecological survey data, inspect and manipulate data frames, use tidyverse pipelines for filtering, summarising and transforming data, visualise patterns with ggplot2, and export results to CSV."
+
+- Class: text
+  Output: "You are ready for the next stage. In Week 2 you will tackle data wrangling and exploratory analysis on larger ecological monitoring datasets."
