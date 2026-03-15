@@ -1,0 +1,385 @@
+---
+author: Quantitative Research Methods
+date: 2026
+output:
+  html_document:
+    highlight: tango
+    toc: true
+    toc_depth: 3
+    toc_float: true
+title: Introduction to R
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(klippy)
+```
+
+```{r klippy, echo=FALSE, include=TRUE}
+klippy::klippy(position = c("top", "right"), tooltip_message = "Copy code", tooltip_success = "Copied!")
+```
+
+## Workshop overview
+
+Welcome to our first R workshop! 
+
+In this workshop you will learn the **fundamentals of R**, a
+powerful, free, open-source programming language widely used in life
+sciences and data analysis.
+
+By the end of this workshop you will be able to:
+
+-   Use R as a **calculator** and store results in variables
+-   Understand **basic data types**, **vectors**, and **data frames**
+-   Install and use **R packages** and **functions**
+-   Set up a **project structure** and import data
+-   Wrangle data using the **tidyverse**
+-   Create basic plots using **ggplot2**
+
+------------------------------------------------------------------------
+
+# 1. R as a calculator
+
+One of the simplest ways to start using R is as a **calculator**.
+
+You type an expression, run it, and R returns the result.
+
+## 1.1 Basic arithmetic operations
+
+```{r}
+# Addition
+3 + 5
+
+# Subtraction
+10 - 4
+
+# Multiplication
+6 * 7
+
+# Division
+20 / 4
+
+# Exponentiation (2 to the power of 3)
+2^3
+```
+
+### Order of operations
+
+R follows standard mathematical rules (**BODMAS / PEMDAS**).
+
+```{r}
+# Without parentheses
+2 + 3 * 4
+
+# With parentheses
+(2 + 3) * 4
+```
+
+Parentheses allow you to **control the order of operations**.
+
+------------------------------------------------------------------------
+
+## 1.2 Assigning values to variables
+
+Instead of calculating a value and losing it, you can **store a value in a variable**.
+
+A variable is simply a **named object that stores a value in the environment**.
+
+We assign values using the **assignment operator** `<-`.
+
+```{r}
+x <- 10
+y <- 3
+```
+
+Now we can use these variables in calculations.
+
+```{r}
+x + y
+x * y
+```
+
+### Updating variables
+
+Variables can be overwritten by assigning a new value.
+
+```{r}
+x <- 10
+x
+
+x <- 99
+x
+```
+
+### Naming variables
+
+Good variable names make your code easier to read.
+
+**Rules for variable names**
+
+- Use letters, numbers, `_`, or `.`
+- Names must start with a **letter**
+- Names are **case-sensitive**. For example, `MyVar` and `myvar` are treated as **different variables**.
+
+### Naming styles
+
+  Style        Example          Description
+  ------------ ---------------- ----------------
+  snake_case   `plant_height`   Lowercase words separated by underscores
+  camelCase    `plantHeight`    Each word capitalised except the first
+
+In R, **snake_case is generally preferred** because it is easier to
+read.
+
+------------------------------------------------------------------------
+
+## 1.3 Basic data types in R
+
+Every value in R has a **data type**.
+
+  Type          Description   Example
+  ------------- ------------- -----------------
+  `numeric`     Numbers       `3.14`, `42`
+  `character`   Text          `"hello"`
+  `logical`     TRUE/FALSE    `TRUE`, `FALSE`
+
+Check the type of a value using `class()`.
+
+```{r}
+class(3.14)
+class("hello")
+class(TRUE)
+```
+
+------------------------------------------------------------------------
+
+## 1.4 Vectors
+
+A **vector** is a collection of values of the same type.
+
+```{r}
+heights_cm <- c(105, 150, 112, 80, 132)
+heights_cm
+
+genus <- c("Banksia", "Eucalyptus", "Acacia")
+genus
+```
+
+<br>
+R applies mathematical operations **to every element**.
+
+```{r}
+heights_cm / 100
+```
+
+------------------------------------------------------------------------
+
+## 1.5 Data frames
+
+A **data frame** stores tabular data.
+
+```{r}
+plant_data <- data.frame(
+  genus = c("Banksia", "Eucalyptus", "Acacia"),
+  height_cm = c(150, 300, 200)
+)
+
+print(plant_data)
+```
+
+<br>
+Access a column using `$` or double square brackets `[[ ]]`:
+
+```{r}
+plant_data$height_cm
+plant_data[["height_cm"]]
+```
+
+------------------------------------------------------------------------
+
+# 2. R packages and functions
+
+## 2.1 Functions
+
+A **function** performs a specific task.
+
+Example:
+
+```{r}
+mean(c(10, 20, 30))
+length(c(10, 20, 30))
+```
+
+-   `mean()` calculates the average
+-   `length()` counts the number of elements
+
+------------------------------------------------------------------------
+
+## 2.2 Packages
+
+A **package** is a collection of functions that extends what R can do.
+
+------------------------------------------------------------------------
+
+## 2.3 Installing and loading packages
+
+You only need to **install a package once**, but you must **load the package from your package library each session**.
+
+```{r eval=FALSE}
+# Install packages
+install.packages("tidyverse")
+```
+
+```{r, message=FALSE, warning=FALSE}
+# Load packages
+library(tidyverse)
+```
+
+The **tidyverse** is a collection of core R packages designed for data science, including:
+
+-   **dplyr** -- data manipulation
+-   **ggplot2** -- visualisation
+-   **readr** -- importing data
+
+------------------------------------------------------------------------
+
+## 2.4 Using functions from packages
+
+```{r}
+glimpse(plant_data)
+```
+
+`glimpse()` gives a **compact overview of a data frame**.
+
+### Function conflicts
+
+If two packages contain the same function name, you can specify the
+package:
+
+```{r}
+dplyr::glimpse(plant_data)
+```
+This can be helpful when **different packages contain functions with the same name**.
+
+------------------------------------------------------------------------
+
+# 3. Project structure
+
+Good project organisation improves **reproducibility**.
+
+    my_project/
+    ├── my_project.Rproj
+    ├── data/
+    ├── scripts/
+    └── output/
+
+Check your working directory:
+
+```{r}
+getwd()
+```
+
+<br>
+List files:
+
+```{r}
+list.files("./data")
+```
+
+<br>
+Read data:
+```{r, message=FALSE, warning=FALSE}
+banksia_data <- read_csv(file = "./data/banksia_data.csv")
+```
+Here, the `read_csv()` looks for the file **banksia_data.csv** in the **data** subdirectory.
+
+
+------------------------------------------------------------------------
+
+# 4. Data wrangling with the tidyverse
+
+Common **dplyr** functions:
+
+  Function      Purpose
+  ------------- ----------------
+  `select()`      choose columns
+  `filter()`      choose rows
+  `mutate()`      create columns
+  `summarise()`   summaries
+  `arrange()`     sort rows
+
+### Pipes
+
+The pipe `%>%` means **"and then"**.
+
+```{r}
+banksia_data %>%
+  select(pair, treatment)
+```
+Here, R reads `banksia_data` ***and then*** selects the columns ***pair*** and ***treatment***
+
+------------------------------------------------------------------------
+
+# 5. Data visualisation with ggplot2
+
+Every ggplot requires:
+
+1.  Data
+2.  Aesthetics (`aes()`)
+3.  Geometry (`geom_*()`)
+
+### Example boxplot
+
+```{r}
+# Create a box plot
+banksia_boxplot <- ggplot(
+  data = banksia_data, 
+  aes(x = treatment, y = height_change_cm)
+  ) +
+  geom_boxplot()
+
+print(banksia_boxplot)
+```
+
+### Example scatter plot
+
+```{r}
+# Create a scatter plot
+banksia_scatter <- ggplot(
+  data = banksia_data,
+  aes(x = height_2013_cm, y = height_2016_cm, colour = treatment)
+  ) +
+  geom_point()
+
+print(banksia_scatter)
+```
+
+### Saving plots
+
+```{r eval=FALSE}
+# Save the boxplot
+ggsave(
+  filename = "output/banksia_boxplot.png",
+  plot = banksia_boxplot,
+  width = 12,
+  height = 8,
+  units = "cm"
+)
+```
+
+# 6. Check your understanding
+
+> **Q1.** Run `x <- 5` and then `y <- x + 3` in R. What value does `y` hold?
+>
+> **Q2.** Check the data type of `x` and `y. Are they numeric or character?
+>
+> **Q3.** How would you call the `filter()` function from the **dplyr** package without loading the package first?
+>
+> **Q4.** What does the pipe operator `%>%` do?
+>
+> **Q5.** Pipe the `banksia_data` into `mutate()` function to recompute `hieght_change_cm` as the difference between `hieght_2016_cm` and `hieght_2013_cm` (Hint: `hieght_change_cm = hieght_2016_cm - hieght_2013_cm`)
+>
+> **Q6.** Which `geom_*()` function do you think might be used for a ***bar*** chart
+>
+
+
